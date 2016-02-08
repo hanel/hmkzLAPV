@@ -72,18 +72,18 @@ Data pro jednotlivá LAPV načtete pomocí funkce `get_lapv_data`, jejímž argu
 Data obsahují:
 
 
-název                                                          
--------  ------------------------------------------------------
-DTM      datum                                                 
-ID       ID povodí                                             
-sim_P    simulované srážky                                     
-sim_T    simulovaná teplota                                    
-GCM      globální klimatický model                             
-RUN      ID běhu modelu                                        
-SID      ID simulace                                           
-obs_P    pozorované srážky                                     
-obs_T    pozorovaná teplota                                    
-obs_RM   odtok pro pozorované podmínky (simulace modelu Bilan) 
+|název  |význam                                                |
+|:------|:-----------------------------------------------------|
+|DTM    |datum                                                 |
+|ID     |ID povodí                                             |
+|sim_P  |simulované srážky                                     |
+|sim_T  |simulovaná teplota                                    |
+|GCM    |globální klimatický model                             |
+|RUN    |ID běhu modelu                                        |
+|SID    |ID simulace                                           |
+|obs_P  |pozorované srážky                                     |
+|obs_T  |pozorovaná teplota                                    |
+|obs_RM |odtok pro pozorované podmínky (simulace modelu Bilan) |
 
 
 # Zadání:
@@ -93,9 +93,11 @@ obs_RM   odtok pro pozorované podmínky (simulace modelu Bilan)
 (A)
 
 - Zagregujte data do ročního časového kroku
-- Pro různá $N \in (10, 110)$ vypočtěte $$K_1 = \frac{R}{\sigma \sqrt(N)} \qquad \mathsf{a} \qquad K_2 = \frac{\log (R / \sigma) } {\log  (N/2)} $$
-- Pro různá $N \in (10, 110)$ vykreslete $\log(R/\sigma)$ proti $\log(N/2)$
+- Pro různá N z intervalu (10, 110) vypočtěte K1 = R / (sigma N^0.5) a K2 = log (R / sigma) / log  (N/2)
+- Pro různá N z intervalu (10, 110) vykreslete log(R/sigma) proti log(N/2)
 - Vytvořte lineární model `lm(log(R/sigma) ~ log(N/2))`, zjistěte hodnotu regresního koeficientu a dokreslete přímku do grafu
 
 (B)
+
 - S využitím funkce 
+
