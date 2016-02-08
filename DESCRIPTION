@@ -1,12 +1,14 @@
 Package: hmkzLAPV
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Vyuka HMKZ
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Martin Hanel
+Maintainer:  <hanel@fzp.czu.cz>
+Description:
+License: GPL
 LazyData: TRUE
 Depends:
     data.table,
-    zoo
+    FGN,
+    magrittr
+RoxygenNote: 5.0.1

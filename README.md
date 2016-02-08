@@ -90,14 +90,37 @@ Data obsahují:
 
 - V rychlosti prostudujte článek **Hurst, H. E. (1956). The Problem of long-term storage in reservoirs. International Association of Scientific Hydrology. Bulletin, 1:3, 13-27.** DOI: 10.1080/02626665609493644
 
-(A)
+(A).
 
-- Zagregujte data do ročního časového kroku
-- Pro různá N z intervalu (10, 110) vypočtěte K1 = R / (sigma N^0.5) a K2 = log (R / sigma) / log  (N/2)
+- Zagregujte data do ročního časového kroku (využijte funkci `mon2yr`)
+- Pro různá N z intervalu (10, 110) vypočtěte K1 = R / (sigma N^0.5) a K2 = log (R / sigma) / log  (N/2), kde R je rozpětí hodnot a sigma je směrodatná odchylka
 - Pro různá N z intervalu (10, 110) vykreslete log(R/sigma) proti log(N/2)
-- Vytvořte lineární model `lm(log(R/sigma) ~ log(N/2))`, zjistěte hodnotu regresního koeficientu a dokreslete přímku do grafu
+- Vytvořte lineární model `lm(log(R/sigma) ~ log(N/2))`, zjistěte hodnotu regresního koeficientu (h) a dokreslete přímku do grafu
+- opakujte pro bílý šum, AR(1) [případně AR(2), AR(3), atd.] proces a FGN proces - pro generování veličin použijte funkci `toyGen`
+- výsledky porovnejte
+- vytvořte funkci, která spočítá pro zadanou veličinu koeficient `h`
+- **!! vše uložte !!**
 
-(B)
 
-- S využitím funkce 
+(B)onus
+
+
+
+```r
+> devtools::install_github("jbkunst/highcharter")
+> ydta = mon2yr(dta)
+> library(highcharter)
+> library(magrittr)
+> highchart(type = "stock") %>% hc_tooltip(valueDecimals = 2) %>% 
++   hc_add_series_times_values(ydta$DTM, ydta$obs_P, name = "Pozorovaná srážka", showInLegend = TRUE) %>% 
++   hc_add_series_times_values(ydta$DTM, ydta$sim_P, name = "Simulovaná srážka") %>%
++   hc_add_theme(hc_theme_darkunica())
+```
+
+viz http://jkunst.com/highcharter
+
+(*)
+
+- S využitím funkce `agg2` postupně agregujte data po dvojicích
+- Vykreslete graf log(k) proti log(sd(x) ^ 0.5), kde k je agregace a sd(x) je veličina agregovaná na k-té úrovni
 

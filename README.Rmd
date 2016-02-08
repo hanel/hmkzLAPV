@@ -1,0 +1,96 @@
+---
+output: 
+  html_document: 
+    keep_md: yes
+    self_contained: no
+    smart: no
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(prompt = TRUE, comment = NA)
+```
+
+
+# hmkzLAPV 
+
+R balík pro výuku předmětu Hydrologické dopady klimatické změny (FŽP, ČZU) v roce 2016.
+
+### Instalace
+
+```{r, eval=FALSE}
+library(devtools)
+install_github("hanel/hmkzLAPV")
+```
+
+nebo
+
+```{r, eval=FALSE}
+library(devtools)
+install_git("https://github.com/hanel/hmkzLAPV.git")
+```
+
+## Úvod
+
+Informace o jednotlivých LAPV jsou dostupné v tabulce `lapv_tab`:
+
+```{r, message=FALSE, warning=FALSE}
+library(hmkzLAPV)
+data(lapv_tab)
+head(lapv_tab)
+
+```
+
+
+Data pro jednotlivá LAPV načtete pomocí funkce `get_lapv_data`, jejímž argumentem je `ID`, tj. identifikátor povodí:
+
+```{r, message=FALSE, warning=FALSE}
+dta = get_lapv_data("AMERIKA")
+head(dta)
+```
+
+Data obsahují:
+
+```{r, echo=FALSE}
+tab = data.table(names(dta), c('datum', 'ID povodí', 'simulované srážky', 'simulovaná teplota', 'globální klimatický model', 'ID běhu modelu', 'ID simulace', 'pozorované srážky', 'pozorovaná teplota', 'odtok pro pozorované podmínky (simulace modelu Bilan) '))
+knitr::kable(tab, col.names = c('název', 'význam'), format = 'markdown')
+```
+
+
+# Zadání:
+
+- V rychlosti prostudujte článek **Hurst, H. E. (1956). The Problem of long-term storage in reservoirs. International Association of Scientific Hydrology. Bulletin, 1:3, 13-27.** DOI: 10.1080/02626665609493644
+
+(A).
+
+- Zagregujte data do ročního časového kroku (využijte funkci `mon2yr`)
+- Pro různá N z intervalu (10, 110) vypočtěte K1 = R / (sigma N^0.5) a K2 = log (R / sigma) / log  (N/2), kde R je rozpětí hodnot a sigma je směrodatná odchylka
+- Pro různá N z intervalu (10, 110) vykreslete log(R/sigma) proti log(N/2)
+- Vytvořte lineární model `lm(log(R/sigma) ~ log(N/2))`, zjistěte hodnotu regresního koeficientu (h) a dokreslete přímku do grafu
+- opakujte pro bílý šum, AR(1) [případně AR(2), AR(3), atd.] proces a FGN proces - pro generování veličin použijte funkci `toyGen`
+- výsledky porovnejte
+- vytvořte funkci, která spočítá pro zadanou veličinu koeficient `h`
+- **!! vše uložte !!**
+
+
+(B)onus
+
+
+```{r, eval=FALSE}
+devtools::install_github("jbkunst/highcharter")
+ydta = mon2yr(dta)
+library(highcharter)
+library(magrittr)
+highchart(type = "stock") %>% hc_tooltip(valueDecimals = 2) %>% 
+  hc_add_series_times_values(ydta$DTM, ydta$obs_P, name = "Pozorovaná srážka", showInLegend = TRUE) %>% 
+  hc_add_series_times_values(ydta$DTM, ydta$sim_P, name = "Simulovaná srážka") %>%
+  hc_add_theme(hc_theme_darkunica())
+
+```
+
+viz http://jkunst.com/highcharter
+
+(*)
+
+- S využitím funkce `agg2` postupně agregujte data po dvojicích
+- Vykreslete graf log(k) proti log(sd(x) ^ 0.5), kde k je agregace a sd(x) je veličina agregovaná na k-té úrovni
+
