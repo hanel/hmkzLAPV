@@ -88,6 +88,8 @@ Data obsahují:
 
 # Zadání:
 
+### 1. CVIČENÍ
+
 - V rychlosti prostudujte článek **Hurst, H. E. (1956). The Problem of long-term storage in reservoirs. International Association of Scientific Hydrology. Bulletin, 1:3, 13-27.** DOI: 10.1080/02626665609493644
 
 (A).
