@@ -1,8 +1,5 @@
-# hmkz
-Martin Hanel  
-February 8, 2016  
 
-# hmkzLAPV
+# hmkzLAPV 
 
 R balík pro výuku předmětu Hydrologické dopady klimatické změny (FŽP, ČZU) v roce 2016.
 
