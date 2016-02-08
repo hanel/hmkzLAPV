@@ -22,7 +22,33 @@ install_git("https://github.com/hanel/hmkzLAPV.git")
 Data pro jednotlivá LAPV načtete pomocí
 
 ```
-get_data_lapv(ID)
+library(hmkzLAPV)
+get_lapv_data(ID)
 ```
 
+
+```r
+library(hmkzLAPV)
+```
+
+```
+## Loading required package: data.table
+## Loading required package: ggplot2
+## Loading required package: zoo
+## 
+## Attaching package: 'zoo'
+## 
+## The following objects are masked from 'package:base':
+## 
+##     as.Date, as.Date.numeric
+```
+
+```r
+ID = 'AMERIKA'
+dta = get_lapv_data(ID)
+```
+
+
 kde `ID` je identifikátor povodí.
+
+
