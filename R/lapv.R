@@ -66,6 +66,7 @@ mon2yr = function(dta){
 #'
 #' @param x číselný vektor - generovaná data mají stejný průměr a směrodatnou odchylku jako tato veličina
 #' @param n délka generovaného vektoru, výchozí \code{n = length(x)}
+#' @param seed seed náhodného generátoru
 #' @param proces specifikace procesu generující náhodnou veličinu - jedno z \code{WN} - bílý šum, \code{ARi} - autoregresní proces, kde \code{i} je řád procesu (tedy např. \code{AR1}, \code{AR2}, atd.), \code{FGN} - fractional Gaussian noise
 #'
 #' @return vygenerovaný vektor
@@ -77,20 +78,20 @@ mon2yr = function(dta){
 #' toyGen(x, proces = 'WN')
 #' toyGen(x, proces = 'AR2')
 #' toyGen(x, proces = 'FGN')
-toyGen = function(x, n = length(x), proces = 'WN'){
+toyGen = function(x, n = length(x), proces = 'WN', seed = NULL){
 
   if (grepl('AR', proces)) {
     ord = as.integer(gsub('AR', '', proces))
     proces = 'AR'
   }
-
+  if (!is.null(seed)) set.seed(seed)
   res = switch(proces,
          'WN' = {
            rnorm(n, mean(x), sd(x))
          },
          'AR' = {
            a = arima(x, order = c(ord, 0, 0))
-           arima.sim(list(ar = a$coef[grepl('ar', names(a$coef))]), n = 100, sd = sqrt(a$sigma2)) + a$coef['intercept']
+           arima.sim(list(ar = a$coef[grepl('ar', names(a$coef))]), n = n, sd = sqrt(a$sigma2)) + a$coef['intercept']
          },
          'FGN' = {
            f = FitFGN(x)
@@ -98,3 +99,59 @@ toyGen = function(x, n = length(x), proces = 'WN'){
          })
   return(res)
   }
+
+
+#' Spočítá statistiky dle Hursta
+#'
+#' @param x vektor pro výpočet statistik
+#' @param N vektor resamplovaných délek
+#'
+#' @return data.frame s výsledky
+#' @export hurst
+#'
+#' @examples
+hurst = function(x, N = 10:100){
+  res = data.frame(N = N)
+  cx = cumsum(x - mean(x))
+
+  for (i in 1:nrow(res) ) {
+
+    N = res[i, "N"]
+    sx = sample(1:(length(x) - N + 1), 1)
+    sx = cx[sx + 1:N - 1]
+
+    R = diff(range(sx))
+    s = sd(x)
+    res[i, "R"] = R
+    res[i, "sigma"] = s
+    res[i, "k1"] = R / s / (N^.5)
+    res[i, "k2"] = log(R/s) / log(N/2)
+  }
+  return(res)
+}
+
+
+#' Vykreslý časovou řadu a kumulativní sumu pro generované řady
+#'
+#' @param x vzro pro generatory
+#' @param seed seed pro generatory
+#' @param ylim rozsah
+#'
+#' @return
+#' @export
+#'
+#' @examples
+plotGen = function(x, seed = NULL, ylim = c(-3000, 3000)){
+
+  par(mfrow = c(2, 1), mar = c(3, 3, .5, .5))
+  toyGen(x, proces = 'WN', seed = seed) %>% -mean(.) %>% cumsum %>% plot(., type = 'l', ylim = ylim)
+  toyGen(x, proces = 'AR1', seed = seed) %>% -mean(.) %>% cumsum %>% lines(., col = 'blue')
+  toyGen(x, proces = 'FGN', seed = seed) %>% -mean(.) %>% cumsum %>% lines(., col = 'red')
+  legend('topright', col = c('black', 'blue', 'red'), legend = c('WN', 'AR1', 'FGN'), lty =1)
+
+  toyGen(x, proces = 'WN', seed = seed)  %>% plot(., type = 'l', ylim = extendrange(range(x), f = 0.2))
+  toyGen(x, proces = 'AR1', seed = seed)  %>% lines(., col = 'blue')
+  toyGen(x, proces = 'FGN', seed = seed)  %>% lines(., col = 'red')
+  legend('topright', col = c('black', 'blue', 'red'), legend = c('WN', 'AR1', 'FGN'), lty =1)
+
+}

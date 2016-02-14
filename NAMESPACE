@@ -2,5 +2,7 @@
 
 export(agg2)
 export(get_lapv_data)
+export(hurst)
 export(mon2yr)
+export(plotGen)
 export(toyGen)

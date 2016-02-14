@@ -4,7 +4,7 @@
 \alias{toyGen}
 \title{Generátor náhodných veličin}
 \usage{
-toyGen(x, n = length(x), proces = "WN")
+toyGen(x, n = length(x), proces = "WN", seed = NULL)
 }
 \arguments{
 \item{x}{číselný vektor - generovaná data mají stejný průměr a směrodatnou odchylku jako tato veličina}
@@ -12,6 +12,8 @@ toyGen(x, n = length(x), proces = "WN")
 \item{n}{délka generovaného vektoru, výchozí \code{n = length(x)}}
 
 \item{proces}{specifikace procesu generující náhodnou veličinu - jedno z \code{WN} - bílý šum, \code{ARi} - autoregresní proces, kde \code{i} je řád procesu (tedy např. \code{AR1}, \code{AR2}, atd.), \code{FGN} - fractional Gaussian noise}
+
+\item{seed}{seed náhodného generátoru}
 }
 \value{
 vygenerovaný vektor
