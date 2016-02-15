@@ -4,7 +4,7 @@
 \alias{toyGen}
 \title{Generátor náhodných veličin}
 \usage{
-toyGen(x, n = length(x), proces = "WN", seed = NULL)
+toyGen(x, n = length(x), proces = "WN", seed = NULL, burnin = 100)
 }
 \arguments{
 \item{x}{číselný vektor - generovaná data mají stejný průměr a směrodatnou odchylku jako tato veličina}

@@ -78,24 +78,25 @@ mon2yr = function(dta){
 #' toyGen(x, proces = 'WN')
 #' toyGen(x, proces = 'AR2')
 #' toyGen(x, proces = 'FGN')
-toyGen = function(x, n = length(x), proces = 'WN', seed = NULL){
+toyGen = function(x, n = length(x), proces = 'WN', seed = NULL, burnin = 100){
 
   if (grepl('AR', proces)) {
     ord = as.integer(gsub('AR', '', proces))
     proces = 'AR'
   }
   if (!is.null(seed)) set.seed(seed)
+
   res = switch(proces,
          'WN' = {
-           rnorm(n, mean(x), sd(x))
+           rnorm(n + burnin, mean(x), sd(x))[1:n + burnin]
          },
          'AR' = {
            a = arima(x, order = c(ord, 0, 0))
-           arima.sim(list(ar = a$coef[grepl('ar', names(a$coef))]), n = n, sd = sqrt(a$sigma2)) + a$coef['intercept']
+           arima.sim(list(ar = a$coef[grepl('ar', names(a$coef))]), n = n, sd = sqrt(a$sigma2), n.start = burnin) + a$coef['intercept']
          },
          'FGN' = {
            f = FitFGN(x)
-           mean(x) + SimulateFGN(n, HurstK(x)) * sqrt(f$sigsqHat)
+           mean(x) + SimulateFGN(n + burnin, HurstK(x))[1:n + burnin] * sqrt(f$sigsqHat)
          })
   return(res)
   }
@@ -127,7 +128,8 @@ hurst = function(x, N = 10:100){
     res[i, "k1"] = R / s / (N^.5)
     res[i, "k2"] = log(R/s) / log(N/2)
   }
-  return(res)
+
+  structure(res, h = unname(lm( log(R/sigma) ~ log(N/2) - 1, data = res)$coe[1]))
 }
 
 
