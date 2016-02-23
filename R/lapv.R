@@ -30,13 +30,13 @@ agg2 = function(x, upto = 8){
   on = names(x)
   setnames(x, names(x), c('DTM', 'x'))
   res = list()
-  res[[1]] = data.table(x, k = 1)
+  res[[1]] = data.table(x, idx = 1, k = 1)
 
   for (i in 2:upto){
 
       pom = data.table(res[[i-1]], id =  (1:nrow(res[[i-1]]))%/%2 )
       pom[, L:= .N, by = id]
-      res[[i]] = pom[L==2, .(DTM = DTM[1] + diff(DTM), x = sum(x), k = i), by = id]
+      res[[i]] = pom[L==2, .(DTM = DTM[1] + diff(DTM), x = sum(x), idx = i, k = 2 ^ (i-1) ), by = id]
       res[[i]][, id:=NULL]
       setnames(res[[i]], 'x', on[2])
     }
@@ -96,7 +96,9 @@ toyGen = function(x, n = length(x), proces = 'WN', seed = NULL, burnin = 100){
          },
          'FGN' = {
            f = FitFGN(x)
-           mean(x) + SimulateFGN(n + burnin, HurstK(x))[1:n + burnin] * sqrt(f$sigsqHat)
+           #Boot(f, 1)
+           f$muHat + SimulateFGN(n + burnin, f$H)[1:n + burnin] * sqrt(f$sigsqHat)
+           #mean(x) + SimulateFGN(n + burnin, HurstK(x))[1:n + burnin] * sqrt(f$sigsqHat)
          })
   return(res)
   }

@@ -96,3 +96,101 @@ viz http://jkunst.com/highcharter
 - S využitím funkce `agg2` postupně agregujte data po dvojicích
 - Vykreslete graf log(k) proti log(sd(x) ^ 0.5), kde k je agregace a sd(x) je veličina agregovaná na k-té úrovni
 
+---
+
+### 2. CVIČENÍ
+
+(A).
+
+- funkce `hurst` je nyní součástí balíku, v čem spočívají zásadní rozdíly mezi touto funkcí a (chybnou) funkcí, kterou jsme používali minule? Tj. 
+
+```{r, eval=FALSE}
+hurst = function(x, N){
+  res = data.frame(N = 10:100  )
+  for (i in 1:nrow(res) ) {
+    sx = sample(x, res[i, "N"])
+    R = diff(range(sx))
+    s = sd(sx)
+    N = res[i, "N"]
+    res[i, "R"] = R
+    res[i, "sigma"] = s
+    res[i, "k1"] = R / (s * N^.5)
+    res[i, "k2"] = log(R/s) / log(N/2)
+  }
+  return(res)
+}
+```
+
+- na základě vybrané veličiny `x` (např. pozorovaný odtok) simulujte pomocí funkce `toyGen` veličiny s využitím bílého šumu (WN), autoregresního procesu prvního řádu (AR1), a fractional gaussian noise (FGN). Vykreslete tyto řady a řady kumulativních odchylek od průměru (použijte funkci `plotGen`)
+- jaké jsou typické hodnoty Hurstova koeficientu pro WN, AR1 a FGN? (lze zjistit pomocí `attr(hurst(x), 'h')`)?
+- pomocí opakovaného samplování určete 90% interval spolehlivosti pro odhady Hurstova koeficientu pro jednotlivé procesy
+
+- vykreslete časovou řadu (ročních) pozorovaných a simulovaných srážek nebo teploty a jejich kumulativní odchylky od průměru
+- jak se liší odhady Hurstova koeficientu? Jsou rozdíly statisticky významné?
+
+(B)onus
+
+Někdy by bylo výhodné, aby grafy v RStudiu umožňovaly alespoň omezenou interaktivitu. Jednou z možností je využítí balíku `manipulate`, který umožňuje velmi jednoduchou implementaci ovládacích prvků (`slider`, `picker`, `checkbox` a `button`)
+
+Příklady s využitím dat z balíku `hmkzLAPV`:
+
+př1:
+
+```{r, eval = FALSE}
+library(manipulate)
+
+dta = get_lapv_data('AMERIKA')
+mdta = mon2yr(dta)
+
+manipulate(
+  plot(mdta$DTM, y, type = type),
+  y = picker("sim_P" = mdta$sim_P, "obs_P" = mdta$obs_P),
+  type = picker("Points" = "p", "Line" = "l", "Step" = "s")
+)
+```
+
+př2:
+
+```{r, eval = FALSE}
+manipulate(
+  {plot(mdta$DTM, y1, type = 'l', col = col1, ylim = range(y1, y2))
+   lines(mdta$DTM, y2, col = col2)  
+    },
+    y1 = picker("sim_P" = mdta$sim_P, "obs_P" = mdta$obs_P),
+    y2 = picker("sim_P" = mdta$sim_P, "obs_P" = mdta$obs_P),
+    col1 = slider(1, 650, initial = 300),
+    col2 = slider(1, 650, initial = 200)
+)
+```
+
+př3:
+
+```{r, eval = FALSE}
+manipulate(
+  plot(mdta$DTM, y, type = type, xlim = c(mdta$DTM[from], mdta$DTM[to])),
+  y = picker("sim_P" = mdta$sim_P, "obs_P" = mdta$obs_P),
+  type = picker("Points" = "p", "Line" = "l", "Step" = "s"), 
+  from = slider(1, nrow(mdta)),
+  to = slider(1, nrow(mdta), initial = nrow(mdta))
+)
+```
+
+
+(*)
+
+- S využitím funkce `agg2` postupně agregujte data po dvojicích
+- Vykreslete graf log(k) proti log(sd(x) ^ 0.5), kde k je agregace a sd(x) je veličina agregovaná na k-té úrovni
+
+
+---
+
+### 3. CVIČENÍ - KOREKCE SYSTEMATICKÝCH CHYB
+
+(A).
+
+1. Zjistěte, jak se liší průměrné srážky a teplota v simulaci od pozorování
+2. Vykreslete empirické distribuční funkce pozorovaných a simulovaných srážek/teploty pro všechny data a jednotlivé měsíce
+3. Zjistěte, jaká je chyba v distribuční funkci simulovaných srážek a teploty pro měsíční (všechny vs jednotlivé měsíce) a roční data
+4. Vyhleďte rozdíly pomocí filtru loess
+5. Opravte simulované veličiny
+6. Vytvořte funkci umožňující korekci distribuční funkce pro jednotlivé měsíce

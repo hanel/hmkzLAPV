@@ -214,3 +214,17 @@ př3:
 
 - S využitím funkce `agg2` postupně agregujte data po dvojicích
 - Vykreslete graf log(k) proti log(sd(x) ^ 0.5), kde k je agregace a sd(x) je veličina agregovaná na k-té úrovni
+
+
+---
+
+### 3. CVIČENÍ - KOREKCE SYSTEMATICKÝCH CHYB
+
+(A).
+
+1. Zjistěte, jak se liší průměrné srážky a teplota v simulaci od pozorování
+2. Vykreslete empirické distribuční funkce pozorovaných a simulovaných srážek/teploty pro všechny data a jednotlivé měsíce
+3. Zjistěte, jaká je chyba v distribuční funkci simulovaných srážek a teploty pro měsíční (všechny vs jednotlivé měsíce) a roční data
+4. Vyhleďte rozdíly pomocí filtru loess
+5. Opravte simulované veličiny
+6. Vytvořte funkci umožňující korekci distribuční funkce pro jednotlivé měsíce
