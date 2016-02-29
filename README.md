@@ -351,4 +351,8 @@ př3:
 
 # PROTOKOL
 
-viz protokol.Rmd
+- použijte Rmarkdown
+- struktura viz protokol.Rmd (zkopírujte a doplňte)
+- odevzdání - mailem pdf **nebo** odkaz na html uložené na rpubs.com
+
+
