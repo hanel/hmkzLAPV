@@ -29,3 +29,7 @@ author: Studentka a Student
 # Vyhodnocení dlouhodobé variability
 
 - v řadách modelovaných odtoků na základě pozorovaných, simulovaných a korigovaných datech
+
+# Vyhodnocení indexů sucha (viz cv Adama Viziny - 8.3.)
+
+# Závěr
