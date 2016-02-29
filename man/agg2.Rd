@@ -2,20 +2,20 @@
 % Please edit documentation in R/lapv.R
 \name{agg2}
 \alias{agg2}
-\title{Vytvoří agregované řady}
+\title{Vytvori agregovane rady}
 \usage{
 agg2(x, upto = 8)
 }
 \arguments{
-\item{x}{číselný vektor}
+\item{x}{ciselny vektor}
 
-\item{upto}{požadovaný počet agregací}
+\item{upto}{pozadovany pocet agregaci}
 }
 \value{
-\code{list} s jednotlivými položkami odpovídajícími jednotlivým agregacím se sloupci \code{DTM} (datum), \code{x} (agregovaná veličina), \code{k} (úroveň agregace)
+\code{list} s jednotlivymi polozkami odpovidajicimi jednotlivym agregacim se sloupci \code{DTM} (datum), \code{x} (agregovana velicina), \code{k} (uroven agregace)
 }
 \description{
-Vytvoří agregované řady
+Vytvori agregovane rady
 }
 \examples{
 dta = get_lapv_data('AMERIKA')

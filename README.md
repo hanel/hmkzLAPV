@@ -225,6 +225,130 @@ př3:
 1. Zjistěte, jak se liší průměrné srážky a teplota v simulaci od pozorování
 2. Vykreslete empirické distribuční funkce pozorovaných a simulovaných srážek/teploty pro všechny data a jednotlivé měsíce
 3. Zjistěte, jaká je chyba v distribuční funkci simulovaných srážek a teploty pro měsíční (všechny vs jednotlivé měsíce) a roční data
-4. Vyhleďte rozdíly pomocí filtru loess
+4. Vyhlaďte rozdíly pomocí filtru loess
 5. Opravte simulované veličiny
 6. Vytvořte funkci umožňující korekci distribuční funkce pro jednotlivé měsíce
+
+
+---
+
+### 4. CVIČENÍ - HYDROLOGICKÝ MODEL A SYNTÉZA
+
+#### Nové funkce v balíku:
+
+- `correct` - provede korekci systematických chyb - viz `?correct`
+- `bil.lapv` - vytvoří instanci modelu Bilan s parametry pro zadanou LAPV - viz `?bil.lapv`
+
+### Stručný úvod do modelu Bilan
+
+- [Bilan](http://bilan.vuv.cz/bilan/uzivatelska-prirucka-modelu-bilan/) je model hydrologické bilance vyvíjený ve Výzkumném ústavu vodohospodářském T. G. Masaryka, v.v.i.
+- 2 verze (stejné jádro) - uživatelské rozhraní x balík pro R
+- nainstalujte pomocí zipového souboru `bilan_2015-06-18.zip` ve složce materialy, verze pro linux a OS X viz `bilan_2015-06-18.tar.gz`
+- základní postup práce relevantní pro naše účely je následující:
+
+
+```r
+> library(bilan)
+> 
+> # načti data
+> dta = get_lapv_data("AMERIKA")
+> 
+> # vytvoř model 
+> b = bil.lapv("AMERIKA")
+> 
+> # model existuje, má příslušné parametry:
+> bil.get.params(b)
+```
+
+```
+  name     current lower upper     initial
+1  Spa 1.45620e+02     0 2e+02 1.45620e+02
+2  Dgw 5.88764e+00     0 2e+01 5.88764e+00
+3  Alf 1.74327e-03     0 3e-03 1.74327e-03
+4  Dgm 5.79781e+00     0 2e+02 5.79781e+00
+5  Soc 5.40708e-01     0 1e+00 5.40708e-01
+6  Wic 2.20102e-01     0 1e+00 2.20102e-01
+7  Mec 6.85181e-01     0 1e+00 6.85181e-01
+8  Grd 7.06486e-01     0 1e+00 7.06486e-01
+```
+
+```r
+> # ale žádná data
+> bil.get.data(b)
+```
+
+```
+ [1] DTM  P    R    RM   BF   B    I    DR   PET  ET   SW   SS   GS   INF 
+[15] PERC RC   T    H    WEI 
+<0 rows> (or 0-length row.names)
+```
+
+```r
+> # Proto nahrajeme do modelu příslušná data z data.tablu dta
+> bil.set.values(b, dta[, .(DTM, P = obs_P, T = obs_T)])
+> 
+> # poté stačí spočítat potenciální evapotranspiraci 
+> bil.pet(b)
+> 
+> # a model spustit
+> res = bil.run(b)
+> 
+> res
+```
+
+```
+             DTM       P  R         RM           BF  B          I
+   1: 1901-01-15 36.2415 NA 35.7908173 35.324300000 NA  0.4665173
+   2: 1901-02-15 51.4596 NA 11.5360213 11.536021346 NA  0.0000000
+   3: 1901-03-15 76.6677 NA 12.8199999  3.385983769 NA  9.4340161
+   4: 1901-04-15 68.9088 NA 94.3496046 24.610249803 NA 69.7393548
+   5: 1901-05-15 71.1843 NA 47.8007750 29.861403497 NA 17.9393715
+  ---                                                            
+1256: 2005-08-15 88.0452 NA 11.7690601  0.460872783 NA  0.0000000
+1257: 2005-09-15 54.6231 NA  4.2980476  0.135272614 NA  0.0000000
+1258: 2005-10-15 16.0395 NA  0.3883653  0.039704406 NA  0.0000000
+1259: 2005-11-15 24.1092 NA  0.7421294  0.011653799 NA  0.0000000
+1260: 2005-12-15 66.6222 NA  1.5646058  0.003420553 NA  1.5611852
+              DR       PET        ET       SW        SS           GS
+   1:  0.0000000  0.000000  0.000000 145.6200  34.12195 16.328733118
+   2:  0.0000000  0.000000  0.000000 145.6200  85.58155  4.792711772
+   3:  0.0000000 12.220326 12.220326 145.6200 107.16690 34.834731053
+   4:  0.0000000 41.237383 41.237383 145.6200  33.05594 42.267509190
+   5:  0.0000000 78.058293 78.058293 145.6200   0.00000 20.648679538
+  ---                                                               
+1256: 11.3081873 83.225574 82.047393 116.5431   0.00000  0.191472462
+1257:  4.1627750 54.688036 53.795217 113.2082   0.00000  0.056199848
+1258:  0.3486609 26.682549 23.921498 104.9776   0.00000  0.016495442
+1259:  0.7304756  7.142156  7.142156 121.2141   0.00000  0.004841643
+1260:  0.0000000  2.276500  2.276500 145.6200  32.84683  5.533243748
+            INF       PERC        RC     T  H WEI
+   1:   2.11955   2.119550  1.653033 -7.64 NA   1
+   2:   0.00000   0.000000  0.000000 -8.25 NA   1
+   3:  42.86202  42.862019 33.428003 -0.72 NA   1
+   4: 101.78238 101.782383 32.043028  5.67 NA   1
+   5:  26.18195  26.181945  8.242574 11.03 NA   1
+  ---                                            
+1256:  76.73701   0.000000  0.000000 14.37 NA   1
+1257:  50.46032   0.000000  0.000000 12.56 NA   1
+1258:  15.69084   0.000000  0.000000  7.65 NA   1
+1259:  23.37872   0.000000  0.000000  0.69 NA   1
+1260:  31.49887   7.093008  5.531823 -2.65 NA   1
+```
+
+#### Zadání:
+
+- nahrajte data pro zvolenou LAPV
+- pomocí funkce `correct` zkorigujte simulované srážky a teploty
+- nainstalujte balík `bilan`
+- nahrajte model pro zvolenou LAPV
+- vytvořte data.frame, který bude obsahovat veličiny
+    - `DTM` - datum
+    - `obs_RM` - odtok modelovaný na základě pozorovaných srážek a teploty
+    - `sim_RM` - odtok modelovaný na základě simulovaných srážek a teploty z klimatického modelu
+    - `cor_RM` - odtok modelovaný na základě korigovaných srážek a teploty
+- vykreslete odchylky `sim_RM`/`obs_RM` a `cor_RM`/`obs_RM` pro jednotlivé kvantily distribuční funkce a měsíce
+- spočítejte hurstův koeficient pro tyto řady a vykreslete řady kumulativních odchylek od průměru
+
+# PROTOKOL
+
+viz protokol.Rmd

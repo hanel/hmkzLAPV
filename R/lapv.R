@@ -1,6 +1,6 @@
 #' Vybere data pro jednu LAPV
 #'
-#' @param ID identifikátor lokality
+#' @param ID identifikator lokality
 #'
 #' @return \code{data.table} s daty pro zvolenou LAPV
 #' @export get_lapv_data
@@ -14,12 +14,12 @@ get_lapv_data = function(ID){
   lapv_data[[ID]]
 }
 
-#' Vytvoří agregované řady
+#' Vytvori agregovane rady
 #'
-#' @param x číselný vektor
-#' @param upto požadovaný počet agregací
+#' @param x ciselny vektor
+#' @param upto pozadovany pocet agregaci
 #'
-#' @return \code{list} s jednotlivými položkami odpovídajícími jednotlivým agregacím se sloupci \code{DTM} (datum), \code{x} (agregovaná veličina), \code{k} (úroveň agregace)
+#' @return \code{list} s jednotlivymi polozkami odpovidajicimi jednotlivym agregacim se sloupci \code{DTM} (datum), \code{x} (agregovana velicina), \code{k} (uroven agregace)
 #' @export agg2
 #'
 #' @examples
@@ -47,7 +47,7 @@ agg2 = function(x, upto = 8){
 #'
 #' @param dta data pro LAPV
 #'
-#' @return \code{data.table} s agregovaným datasetem
+#' @return \code{data.table} s agregovanym datasetem
 #' @export mon2yr
 #'
 #' @examples
@@ -62,14 +62,14 @@ mon2yr = function(dta){
 }
 
 
-#' Generátor náhodných veličin
+#' Generator nahodnych velicin
 #'
-#' @param x číselný vektor - generovaná data mají stejný průměr a směrodatnou odchylku jako tato veličina
-#' @param n délka generovaného vektoru, výchozí \code{n = length(x)}
-#' @param seed seed náhodného generátoru
-#' @param proces specifikace procesu generující náhodnou veličinu - jedno z \code{WN} - bílý šum, \code{ARi} - autoregresní proces, kde \code{i} je řád procesu (tedy např. \code{AR1}, \code{AR2}, atd.), \code{FGN} - fractional Gaussian noise
+#' @param x ciselny vektor - generovana data maji stejny prumer a smerodatnou odchylku jako tato velicina
+#' @param n delka generovaneho vektoru, vychozi \code{n = length(x)}
+#' @param seed seed nahodneho generatoru
+#' @param proces specifikace procesu generujiciho nahodnou velicinu - jedno z \code{WN} - bily sum, \code{ARi} - autoregresni proces, kde \code{i} je rad procesu (tedy napr. \code{AR1}, \code{AR2}, atd.), \code{FGN} - fractional Gaussian noise
 #'
-#' @return vygenerovaný vektor
+#' @return vygenerovany vektor
 #' @export toyGen
 #'
 #' @examples
@@ -104,12 +104,12 @@ toyGen = function(x, n = length(x), proces = 'WN', seed = NULL, burnin = 100){
   }
 
 
-#' Spočítá statistiky dle Hursta
+#' Spocíta statistiky dle Hursta
 #'
-#' @param x vektor pro výpočet statistik
-#' @param N vektor resamplovaných délek
+#' @param x vektor pro vypocet statistik
+#' @param N vektor resamplovanych delek
 #'
-#' @return data.frame s výsledky
+#' @return data.frame s vysledky
 #' @export hurst
 #'
 #' @examples
@@ -135,14 +135,14 @@ hurst = function(x, N = 10:100){
 }
 
 
-#' Vykreslý časovou řadu a kumulativní sumu pro generované řady
+#' Vykresli casovou radu a kumulativni sumu pro generovane rady
 #'
 #' @param x vzro pro generatory
 #' @param seed seed pro generatory
 #' @param ylim rozsah
 #'
-#' @return
-#' @export
+#' @return nic
+#' @export plotGen
 #'
 #' @examples
 plotGen = function(x, seed = NULL, ylim = c(-3000, 3000)){
@@ -158,4 +158,50 @@ plotGen = function(x, seed = NULL, ylim = c(-3000, 3000)){
   toyGen(x, proces = 'FGN', seed = seed)  %>% lines(., col = 'red')
   legend('topright', col = c('black', 'blue', 'red'), legend = c('WN', 'AR1', 'FGN'), lty =1)
 
+}
+
+
+#' Vytvori Bilan model s parametry ziskanymi kalibraci pro vybrane LAPV
+#'
+#' @param ID ID lokality
+#' @param type Typ modelu, vetsinou mesicni (tj. vychozi hodnota)
+#' @param ... ostatni parametry - predano do funkce \code{bil.new}
+#'
+#' @return bilan model objekt
+#' @export bil.lapv
+#'
+#' @examples
+#' dta  = get_lapv_data("AMERIKA")
+#'b = bil.lapv("AMERIKA")
+#'
+#'bil.set.values(b, dta[, .(DTM, P = obs_P, T = obs_T)])
+#'bil.pet(b)
+#'res = bil.run(b)
+bil.lapv = function(ID, type = 'm', ...){
+  data(bil_pars)
+  b = bil.new(type = type, ...)
+  bil.set.params(b, B[[ID]])
+  return(b)
+}
+
+#' Proved korekci systematickych chyb pomoci kvantilove metody 
+#'
+#' @param dta data pro LAPV - typicky vysledek volani \code{get_lapv_data}
+#' @param ... ostatni parametry - predane do funkce \code{loess} slouzici k vyhlazeni odchylek
+#'
+#' @return data s korigovanymi sloupci (sloupce \code{cor_P} a \code{cor_T})
+#' @export correct
+#'
+#' @examples
+#' dta = get_lapv_data("AMERIKA")
+#' cdta = correct(dta)
+correct = function(dta, ...){
+  
+  dta[, eP := loess(sort(sim_P)/sort(obs_P) ~ I(1:.N), ...)$fitted[rank(sim_P)], by = month(DTM)]
+  dta[, cor_P:= sim_P / eP, by = month(DTM)]
+  
+  dta[, eT := loess(sort(sim_T)-sort(obs_T) ~ I(1:.N), ...)$fitted[rank(sim_T)], by = month(DTM)]
+  dta[, cor_T:= sim_T - eT, by = month(DTM)]
+  copy(dta)
+  
 }

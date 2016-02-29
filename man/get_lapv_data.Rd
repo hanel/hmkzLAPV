@@ -7,7 +7,7 @@
 get_lapv_data(ID)
 }
 \arguments{
-\item{ID}{identifikátor lokality}
+\item{ID}{identifikator lokality}
 }
 \value{
 \code{data.table} s daty pro zvolenou LAPV

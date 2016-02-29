@@ -2,7 +2,7 @@
 % Please edit documentation in R/lapv.R
 \name{plotGen}
 \alias{plotGen}
-\title{Vykreslý časovou řadu a kumulativní sumu pro generované řady}
+\title{Vykresli casovou radu a kumulativni sumu pro generovane rady}
 \usage{
 plotGen(x, seed = NULL, ylim = c(-3000, 3000))
 }
@@ -13,7 +13,10 @@ plotGen(x, seed = NULL, ylim = c(-3000, 3000))
 
 \item{ylim}{rozsah}
 }
+\value{
+nic
+}
 \description{
-Vykreslý časovou řadu a kumulativní sumu pro generované řady
+Vykresli casovou radu a kumulativni sumu pro generovane rady
 }
 

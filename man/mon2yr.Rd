@@ -10,7 +10,7 @@ mon2yr(dta)
 \item{dta}{data pro LAPV}
 }
 \value{
-\code{data.table} s agregovaným datasetem
+\code{data.table} s agregovanym datasetem
 }
 \description{
 Agreguj na roky

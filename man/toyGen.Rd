@@ -2,24 +2,24 @@
 % Please edit documentation in R/lapv.R
 \name{toyGen}
 \alias{toyGen}
-\title{Generátor náhodných veličin}
+\title{Generator nahodnych velicin}
 \usage{
 toyGen(x, n = length(x), proces = "WN", seed = NULL, burnin = 100)
 }
 \arguments{
-\item{x}{číselný vektor - generovaná data mají stejný průměr a směrodatnou odchylku jako tato veličina}
+\item{x}{ciselny vektor - generovana data maji stejny prumer a smerodatnou odchylku jako tato velicina}
 
-\item{n}{délka generovaného vektoru, výchozí \code{n = length(x)}}
+\item{n}{delka generovaneho vektoru, vychozi \code{n = length(x)}}
 
-\item{proces}{specifikace procesu generující náhodnou veličinu - jedno z \code{WN} - bílý šum, \code{ARi} - autoregresní proces, kde \code{i} je řád procesu (tedy např. \code{AR1}, \code{AR2}, atd.), \code{FGN} - fractional Gaussian noise}
+\item{proces}{specifikace procesu generujiciho nahodnou velicinu - jedno z \code{WN} - bily sum, \code{ARi} - autoregresni proces, kde \code{i} je rad procesu (tedy napr. \code{AR1}, \code{AR2}, atd.), \code{FGN} - fractional Gaussian noise}
 
-\item{seed}{seed náhodného generátoru}
+\item{seed}{seed nahodneho generatoru}
 }
 \value{
-vygenerovaný vektor
+vygenerovany vektor
 }
 \description{
-Generátor náhodných veličin
+Generator nahodnych velicin
 }
 \examples{
 dta = get_lapv_data('AMERIKA')

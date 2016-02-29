@@ -2,19 +2,19 @@
 % Please edit documentation in R/lapv.R
 \name{hurst}
 \alias{hurst}
-\title{Spočítá statistiky dle Hursta}
+\title{Spocíta statistiky dle Hursta}
 \usage{
 hurst(x, N = 10:100)
 }
 \arguments{
-\item{x}{vektor pro výpočet statistik}
+\item{x}{vektor pro vypocet statistik}
 
-\item{N}{vektor resamplovaných délek}
+\item{N}{vektor resamplovanych delek}
 }
 \value{
-data.frame s výsledky
+data.frame s vysledky
 }
 \description{
-Spočítá statistiky dle Hursta
+Spocíta statistiky dle Hursta
 }
 
