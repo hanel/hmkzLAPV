@@ -1,4 +1,31 @@
 ---
 title: "Hydrologické modelování dopadů klimatické změny"
-output: html_document
+output: 
+  html_document: 
+    keep_md: yes
+    number_sections: yes
+    toc: yes
+author: Studentka a Student
 ---
+
+# Úvod
+
+- lokalizace a údaje vybrané LAPV
+
+# Data a korekce systematických chyb
+
+- graf(y) veličin
+- sumarizace chyb v simulacích klimatických modelů
+- korekce systematických chyb a její vyhodnocení
+
+# Charakteristiky dlouhodobé variability vstupních veličin
+
+- Hurstův koeficient a grafy kumulativních odchylek od průměru pro pozorované, simulované a korigované srážky a teplotu
+
+# Modelování hydrologickým modelem Bilan
+
+- sumarizace základních charakteristik modelovaných odtoků na základě pozorovaných, simulovaných a korigovaných datech
+
+# Vyhodnocení dlouhodobé variability
+
+- v řadách modelovaných odtoků na základě pozorovaných, simulovaných a korigovaných datech
