@@ -1,0 +1,433 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Hmkzlapv by hanel</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Hmkzlapv</h1>
+        <p>Balík pro výuku předmětu Hydrologické dopady klimatické změny (FŽP, ČZU).</p>
+
+        <p class="view"><a href="https://github.com/hanel/hmkzLAPV">View the Project on GitHub <small>hanel/hmkzLAPV</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/hanel/hmkzLAPV/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/hanel/hmkzLAPV/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/hanel/hmkzLAPV">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="hmkzlapv" class="anchor" href="#hmkzlapv" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>hmkzLAPV</h1>
+
+<p>R balík pro výuku předmětu Hydrologické dopady klimatické změny (FŽP, ČZU) v roce 2016.</p>
+
+<h3>
+<a id="instalace" class="anchor" href="#instalace" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Instalace</h3>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-k">&gt;</span> library(<span class="pl-smi">devtools</span>)
+<span class="pl-k">&gt;</span> install_github(<span class="pl-s"><span class="pl-pds">"</span>hanel/hmkzLAPV<span class="pl-pds">"</span></span>)</pre></div>
+
+<p>nebo</p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-k">&gt;</span> library(<span class="pl-smi">devtools</span>)
+<span class="pl-k">&gt;</span> install_git(<span class="pl-s"><span class="pl-pds">"</span>https://github.com/hanel/hmkzLAPV.git<span class="pl-pds">"</span></span>)</pre></div>
+
+<h2>
+<a id="Úvod" class="anchor" href="#%C3%9Avod" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Úvod</h2>
+
+<p>Informace o jednotlivých LAPV jsou dostupné v tabulce <code>lapv_tab</code>:</p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-k">&gt;</span> library(<span class="pl-smi">hmkzLAPV</span>)
+<span class="pl-k">&gt;</span> data(<span class="pl-smi">lapv_tab</span>)
+<span class="pl-k">&gt;</span> head(<span class="pl-smi">lapv_tab</span>)</pre></div>
+
+<pre><code>         ID        A NAZEV_NADR Vpot
+1:     FORT 30379718       Fořt 13.3
+2:     BABI 10254929       Babí 11.1
+3: LUKAVICE 15384980   Lukavice 14.1
+4:    PECIN 38227478      Pěčín 17.1
+5:  ZAMBERK 28315407    Žamberk 24.4
+6:  PISECNA 13958154    Písečná  4.9
+</code></pre>
+
+<p>Data pro jednotlivá LAPV načtete pomocí funkce <code>get_lapv_data</code>, jejímž argumentem je <code>ID</code>, tj. identifikátor povodí:</p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-k">&gt;</span> <span class="pl-v">dta</span> <span class="pl-k">=</span> get_lapv_data(<span class="pl-s"><span class="pl-pds">"</span>AMERIKA<span class="pl-pds">"</span></span>)
+<span class="pl-k">&gt;</span> head(<span class="pl-smi">dta</span>)</pre></div>
+
+<pre><code>          DTM      ID     sim_P     sim_T       GCM    RUN
+1: 1901-01-15 AMERIKA  61.22721 -1.163763 GISS-E2-H r5i1p3
+2: 1901-02-15 AMERIKA  47.17358  4.116205 GISS-E2-H r5i1p3
+3: 1901-03-15 AMERIKA  85.45800  3.675195 GISS-E2-H r5i1p3
+4: 1901-04-15 AMERIKA 120.38636  7.676691 GISS-E2-H r5i1p3
+5: 1901-05-15 AMERIKA 167.56643 12.769983 GISS-E2-H r5i1p3
+6: 1901-06-15 AMERIKA 170.42231 15.459894 GISS-E2-H r5i1p3
+                SID    obs_P obs_T  obs_RM
+1: GISS-E2-H_r5i1p3  36.2415 -7.64 35.7908
+2: GISS-E2-H_r5i1p3  51.4596 -8.25 11.5360
+3: GISS-E2-H_r5i1p3  76.6677 -0.72 12.8200
+4: GISS-E2-H_r5i1p3  68.9088  5.67 94.3496
+5: GISS-E2-H_r5i1p3  71.1843 11.03 47.8008
+6: GISS-E2-H_r5i1p3 130.1480 14.23 45.6612
+</code></pre>
+
+<p>Data obsahují:</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">název</th>
+<th align="left">význam</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">DTM</td>
+<td align="left">datum</td>
+</tr>
+<tr>
+<td align="left">ID</td>
+<td align="left">ID povodí</td>
+</tr>
+<tr>
+<td align="left">sim_P</td>
+<td align="left">simulované srážky</td>
+</tr>
+<tr>
+<td align="left">sim_T</td>
+<td align="left">simulovaná teplota</td>
+</tr>
+<tr>
+<td align="left">GCM</td>
+<td align="left">globální klimatický model</td>
+</tr>
+<tr>
+<td align="left">RUN</td>
+<td align="left">ID běhu modelu</td>
+</tr>
+<tr>
+<td align="left">SID</td>
+<td align="left">ID simulace</td>
+</tr>
+<tr>
+<td align="left">obs_P</td>
+<td align="left">pozorované srážky</td>
+</tr>
+<tr>
+<td align="left">obs_T</td>
+<td align="left">pozorovaná teplota</td>
+</tr>
+<tr>
+<td align="left">obs_RM</td>
+<td align="left">odtok pro pozorované podmínky (simulace modelu Bilan)</td>
+</tr>
+</tbody>
+</table>
+
+<h1>
+<a id="zadání" class="anchor" href="#zad%C3%A1n%C3%AD" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Zadání:</h1>
+
+<h3>
+<a id="1-cviČenÍ" class="anchor" href="#1-cvi%C4%8Cen%C3%8D" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. CVIČENÍ</h3>
+
+<ul>
+<li>V rychlosti prostudujte článek <strong>Hurst, H. E. (1956). The Problem of long-term storage in reservoirs. International Association of Scientific Hydrology. Bulletin, 1:3, 13-27.</strong> DOI: 10.1080/02626665609493644</li>
+</ul>
+
+<p>(A).</p>
+
+<ul>
+<li>Zagregujte data do ročního časového kroku (využijte funkci <code>mon2yr</code>)</li>
+<li>Pro různá N z intervalu (10, 110) vypočtěte K1 = R / (sigma N^0.5) a K2 = log (R / sigma) / log  (N/2), kde R je rozpětí hodnot a sigma je směrodatná odchylka</li>
+<li>Pro různá N z intervalu (10, 110) vykreslete log(R/sigma) proti log(N/2)</li>
+<li>Vytvořte lineární model <code>lm(log(R/sigma) ~ log(N/2))</code>, zjistěte hodnotu regresního koeficientu (h) a dokreslete přímku do grafu</li>
+<li>opakujte pro bílý šum, AR(1) [případně AR(2), AR(3), atd.] proces a FGN proces - pro generování veličin použijte funkci <code>toyGen</code>
+</li>
+<li>výsledky porovnejte</li>
+<li>vytvořte funkci, která spočítá pro zadanou veličinu koeficient <code>h</code>
+</li>
+<li><strong>!! vše uložte !!</strong></li>
+</ul>
+
+<p>(B)onus</p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-k">&gt;</span> <span class="pl-e">devtools</span><span class="pl-k">::</span>install_github(<span class="pl-s"><span class="pl-pds">"</span>jbkunst/highcharter<span class="pl-pds">"</span></span>)
+<span class="pl-k">&gt;</span> <span class="pl-v">ydta</span> <span class="pl-k">=</span> mon2yr(<span class="pl-smi">dta</span>)
+<span class="pl-k">&gt;</span> library(<span class="pl-smi">highcharter</span>)
+<span class="pl-k">&gt;</span> library(<span class="pl-smi">magrittr</span>)
+<span class="pl-k">&gt;</span> highchart(<span class="pl-v">type</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>stock<span class="pl-pds">"</span></span>) %<span class="pl-k">&gt;</span>% hc_tooltip(<span class="pl-v">valueDecimals</span> <span class="pl-k">=</span> <span class="pl-c1">2</span>) %<span class="pl-k">&gt;</span>% 
+<span class="pl-k">+</span>   hc_add_series_times_values(<span class="pl-smi">ydta</span><span class="pl-k">$</span><span class="pl-smi">DTM</span>, <span class="pl-smi">ydta</span><span class="pl-k">$</span><span class="pl-smi">obs_P</span>, <span class="pl-v">name</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Pozorovaná srážka<span class="pl-pds">"</span></span>, <span class="pl-v">showInLegend</span> <span class="pl-k">=</span> <span class="pl-c1">TRUE</span>) %<span class="pl-k">&gt;</span>% 
+<span class="pl-k">+</span>   hc_add_series_times_values(<span class="pl-smi">ydta</span><span class="pl-k">$</span><span class="pl-smi">DTM</span>, <span class="pl-smi">ydta</span><span class="pl-k">$</span><span class="pl-smi">sim_P</span>, <span class="pl-v">name</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Simulovaná srážka<span class="pl-pds">"</span></span>) %<span class="pl-k">&gt;</span>%
+<span class="pl-k">+</span>   hc_add_theme(hc_theme_darkunica())</pre></div>
+
+<p>viz <a href="http://jkunst.com/highcharter">http://jkunst.com/highcharter</a></p>
+
+<p>(*)</p>
+
+<ul>
+<li>S využitím funkce <code>agg2</code> postupně agregujte data po dvojicích</li>
+<li>Vykreslete graf log(k) proti log(sd(x) ^ 0.5), kde k je agregace a sd(x) je veličina agregovaná na k-té úrovni</li>
+</ul>
+
+<hr>
+
+<h3>
+<a id="2-cviČenÍ" class="anchor" href="#2-cvi%C4%8Cen%C3%8D" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. CVIČENÍ</h3>
+
+<p>(A).</p>
+
+<ul>
+<li>funkce <code>hurst</code> je nyní součástí balíku, v čem spočívají zásadní rozdíly mezi touto funkcí a (chybnou) funkcí, kterou jsme používali minule? Tj. </li>
+</ul>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-k">&gt;</span> <span class="pl-v">hurst</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">x</span>, <span class="pl-smi">N</span>){
+<span class="pl-k">+</span>   <span class="pl-v">res</span> <span class="pl-k">=</span> <span class="pl-k">data.frame</span>(<span class="pl-v">N</span> <span class="pl-k">=</span> <span class="pl-c1">10</span><span class="pl-k">:</span><span class="pl-c1">100</span>  )
+<span class="pl-k">+</span>   <span class="pl-k">for</span> (<span class="pl-smi">i</span> <span class="pl-k">in</span> <span class="pl-c1">1</span><span class="pl-k">:</span>nrow(<span class="pl-smi">res</span>) ) {
+<span class="pl-k">+</span>     <span class="pl-v">sx</span> <span class="pl-k">=</span> sample(<span class="pl-smi">x</span>, <span class="pl-smi">res</span>[<span class="pl-smi">i</span>, <span class="pl-s"><span class="pl-pds">"</span>N<span class="pl-pds">"</span></span>])
+<span class="pl-k">+</span>     <span class="pl-v">R</span> <span class="pl-k">=</span> diff(range(<span class="pl-smi">sx</span>))
+<span class="pl-k">+</span>     <span class="pl-v">s</span> <span class="pl-k">=</span> sd(<span class="pl-smi">sx</span>)
+<span class="pl-k">+</span>     <span class="pl-v">N</span> <span class="pl-k">=</span> <span class="pl-smi">res</span>[<span class="pl-smi">i</span>, <span class="pl-s"><span class="pl-pds">"</span>N<span class="pl-pds">"</span></span>]
+<span class="pl-k">+</span>     <span class="pl-smi">res</span>[<span class="pl-smi">i</span>, <span class="pl-s"><span class="pl-pds">"</span>R<span class="pl-pds">"</span></span>] <span class="pl-k">=</span> <span class="pl-smi">R</span>
+<span class="pl-k">+</span>     <span class="pl-smi">res</span>[<span class="pl-smi">i</span>, <span class="pl-s"><span class="pl-pds">"</span>sigma<span class="pl-pds">"</span></span>] <span class="pl-k">=</span> <span class="pl-smi">s</span>
+<span class="pl-k">+</span>     <span class="pl-smi">res</span>[<span class="pl-smi">i</span>, <span class="pl-s"><span class="pl-pds">"</span>k1<span class="pl-pds">"</span></span>] <span class="pl-k">=</span> <span class="pl-smi">R</span> <span class="pl-k">/</span> (<span class="pl-smi">s</span> <span class="pl-k">*</span> <span class="pl-smi">N</span><span class="pl-k">^</span>.<span class="pl-c1">5</span>)
+<span class="pl-k">+</span>     <span class="pl-smi">res</span>[<span class="pl-smi">i</span>, <span class="pl-s"><span class="pl-pds">"</span>k2<span class="pl-pds">"</span></span>] <span class="pl-k">=</span> log(<span class="pl-smi">R</span><span class="pl-k">/</span><span class="pl-smi">s</span>) <span class="pl-k">/</span> log(<span class="pl-smi">N</span><span class="pl-k">/</span><span class="pl-c1">2</span>)
+<span class="pl-k">+</span>   }
+<span class="pl-k">+</span>   <span class="pl-k">return</span>(<span class="pl-smi">res</span>)
+<span class="pl-k">+</span> }</pre></div>
+
+<ul>
+<li>na základě vybrané veličiny <code>x</code> (např. pozorovaný odtok) simulujte pomocí funkce <code>toyGen</code> veličiny s využitím bílého šumu (WN), autoregresního procesu prvního řádu (AR1), a fractional gaussian noise (FGN). Vykreslete tyto řady a řady kumulativních odchylek od průměru (použijte funkci <code>plotGen</code>)</li>
+<li>jaké jsou typické hodnoty Hurstova koeficientu pro WN, AR1 a FGN? (lze zjistit pomocí <code>attr(hurst(x), 'h')</code>)?</li>
+<li><p>pomocí opakovaného samplování určete 90% interval spolehlivosti pro odhady Hurstova koeficientu pro jednotlivé procesy</p></li>
+<li><p>vykreslete časovou řadu (ročních) pozorovaných a simulovaných srážek nebo teploty a jejich kumulativní odchylky od průměru</p></li>
+<li>jak se liší odhady Hurstova koeficientu? Jsou rozdíly statisticky významné?</li>
+</ul>
+
+<p>(B)onus</p>
+
+<p>Někdy by bylo výhodné, aby grafy v RStudiu umožňovaly alespoň omezenou interaktivitu. Jednou z možností je využítí balíku <code>manipulate</code>, který umožňuje velmi jednoduchou implementaci ovládacích prvků (<code>slider</code>, <code>picker</code>, <code>checkbox</code> a <code>button</code>)</p>
+
+<p>Příklady s využitím dat z balíku <code>hmkzLAPV</code>:</p>
+
+<p>př1:</p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-k">&gt;</span> library(<span class="pl-smi">manipulate</span>)
+<span class="pl-k">&gt;</span> 
+<span class="pl-k">&gt;</span> <span class="pl-v">dta</span> <span class="pl-k">=</span> get_lapv_data(<span class="pl-s"><span class="pl-pds">'</span>AMERIKA<span class="pl-pds">'</span></span>)
+<span class="pl-k">&gt;</span> <span class="pl-v">mdta</span> <span class="pl-k">=</span> mon2yr(<span class="pl-smi">dta</span>)
+<span class="pl-k">&gt;</span> 
+<span class="pl-k">&gt;</span> manipulate(
+<span class="pl-k">+</span>   plot(<span class="pl-smi">mdta</span><span class="pl-k">$</span><span class="pl-smi">DTM</span>, <span class="pl-smi">y</span>, <span class="pl-v">type</span> <span class="pl-k">=</span> <span class="pl-smi">type</span>),
+<span class="pl-k">+</span>   <span class="pl-v">y</span> <span class="pl-k">=</span> picker(<span class="pl-s"><span class="pl-pds">"</span>sim_P<span class="pl-pds">"</span></span> <span class="pl-k">=</span> <span class="pl-smi">mdta</span><span class="pl-k">$</span><span class="pl-smi">sim_P</span>, <span class="pl-s"><span class="pl-pds">"</span>obs_P<span class="pl-pds">"</span></span> <span class="pl-k">=</span> <span class="pl-smi">mdta</span><span class="pl-k">$</span><span class="pl-smi">obs_P</span>),
+<span class="pl-k">+</span>   <span class="pl-v">type</span> <span class="pl-k">=</span> picker(<span class="pl-s"><span class="pl-pds">"</span>Points<span class="pl-pds">"</span></span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>p<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Line<span class="pl-pds">"</span></span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>l<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Step<span class="pl-pds">"</span></span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>s<span class="pl-pds">"</span></span>)
+<span class="pl-k">+</span> )</pre></div>
+
+<p>př2:</p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-k">&gt;</span> manipulate(
+<span class="pl-k">+</span>   {plot(<span class="pl-smi">mdta</span><span class="pl-k">$</span><span class="pl-smi">DTM</span>, <span class="pl-smi">y1</span>, <span class="pl-v">type</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>l<span class="pl-pds">'</span></span>, <span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-smi">col1</span>, <span class="pl-v">ylim</span> <span class="pl-k">=</span> range(<span class="pl-smi">y1</span>, <span class="pl-smi">y2</span>))
+<span class="pl-k">+</span>    lines(<span class="pl-smi">mdta</span><span class="pl-k">$</span><span class="pl-smi">DTM</span>, <span class="pl-smi">y2</span>, <span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-smi">col2</span>)  
+<span class="pl-k">+</span>     },
+<span class="pl-k">+</span>     <span class="pl-v">y1</span> <span class="pl-k">=</span> picker(<span class="pl-s"><span class="pl-pds">"</span>sim_P<span class="pl-pds">"</span></span> <span class="pl-k">=</span> <span class="pl-smi">mdta</span><span class="pl-k">$</span><span class="pl-smi">sim_P</span>, <span class="pl-s"><span class="pl-pds">"</span>obs_P<span class="pl-pds">"</span></span> <span class="pl-k">=</span> <span class="pl-smi">mdta</span><span class="pl-k">$</span><span class="pl-smi">obs_P</span>),
+<span class="pl-k">+</span>     <span class="pl-v">y2</span> <span class="pl-k">=</span> picker(<span class="pl-s"><span class="pl-pds">"</span>sim_P<span class="pl-pds">"</span></span> <span class="pl-k">=</span> <span class="pl-smi">mdta</span><span class="pl-k">$</span><span class="pl-smi">sim_P</span>, <span class="pl-s"><span class="pl-pds">"</span>obs_P<span class="pl-pds">"</span></span> <span class="pl-k">=</span> <span class="pl-smi">mdta</span><span class="pl-k">$</span><span class="pl-smi">obs_P</span>),
+<span class="pl-k">+</span>     <span class="pl-v">col1</span> <span class="pl-k">=</span> slider(<span class="pl-c1">1</span>, <span class="pl-c1">650</span>, <span class="pl-v">initial</span> <span class="pl-k">=</span> <span class="pl-c1">300</span>),
+<span class="pl-k">+</span>     <span class="pl-v">col2</span> <span class="pl-k">=</span> slider(<span class="pl-c1">1</span>, <span class="pl-c1">650</span>, <span class="pl-v">initial</span> <span class="pl-k">=</span> <span class="pl-c1">200</span>)
+<span class="pl-k">+</span> )</pre></div>
+
+<p>př3:</p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-k">&gt;</span> manipulate(
+<span class="pl-k">+</span>   plot(<span class="pl-smi">mdta</span><span class="pl-k">$</span><span class="pl-smi">DTM</span>, <span class="pl-smi">y</span>, <span class="pl-v">type</span> <span class="pl-k">=</span> <span class="pl-smi">type</span>, <span class="pl-v">xlim</span> <span class="pl-k">=</span> c(<span class="pl-smi">mdta</span><span class="pl-k">$</span><span class="pl-smi">DTM</span>[<span class="pl-smi">from</span>], <span class="pl-smi">mdta</span><span class="pl-k">$</span><span class="pl-smi">DTM</span>[<span class="pl-smi">to</span>])),
+<span class="pl-k">+</span>   <span class="pl-v">y</span> <span class="pl-k">=</span> picker(<span class="pl-s"><span class="pl-pds">"</span>sim_P<span class="pl-pds">"</span></span> <span class="pl-k">=</span> <span class="pl-smi">mdta</span><span class="pl-k">$</span><span class="pl-smi">sim_P</span>, <span class="pl-s"><span class="pl-pds">"</span>obs_P<span class="pl-pds">"</span></span> <span class="pl-k">=</span> <span class="pl-smi">mdta</span><span class="pl-k">$</span><span class="pl-smi">obs_P</span>),
+<span class="pl-k">+</span>   <span class="pl-v">type</span> <span class="pl-k">=</span> picker(<span class="pl-s"><span class="pl-pds">"</span>Points<span class="pl-pds">"</span></span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>p<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Line<span class="pl-pds">"</span></span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>l<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Step<span class="pl-pds">"</span></span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>s<span class="pl-pds">"</span></span>), 
+<span class="pl-k">+</span>   <span class="pl-v">from</span> <span class="pl-k">=</span> slider(<span class="pl-c1">1</span>, nrow(<span class="pl-smi">mdta</span>)),
+<span class="pl-k">+</span>   <span class="pl-v">to</span> <span class="pl-k">=</span> slider(<span class="pl-c1">1</span>, nrow(<span class="pl-smi">mdta</span>), <span class="pl-v">initial</span> <span class="pl-k">=</span> nrow(<span class="pl-smi">mdta</span>))
+<span class="pl-k">+</span> )</pre></div>
+
+<p>(*)</p>
+
+<ul>
+<li>S využitím funkce <code>agg2</code> postupně agregujte data po dvojicích</li>
+<li>Vykreslete graf log(k) proti log(sd(x) ^ 0.5), kde k je agregace a sd(x) je veličina agregovaná na k-té úrovni</li>
+</ul>
+
+<hr>
+
+<h3>
+<a id="3-cviČenÍ---korekce-systematickÝch-chyb" class="anchor" href="#3-cvi%C4%8Cen%C3%8D---korekce-systematick%C3%9Dch-chyb" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3. CVIČENÍ - KOREKCE SYSTEMATICKÝCH CHYB</h3>
+
+<p>(A).</p>
+
+<ol>
+<li>Zjistěte, jak se liší průměrné srážky a teplota v simulaci od pozorování</li>
+<li>Vykreslete empirické distribuční funkce pozorovaných a simulovaných srážek/teploty pro všechny data a jednotlivé měsíce</li>
+<li>Zjistěte, jaká je chyba v distribuční funkci simulovaných srážek a teploty pro měsíční (všechny vs jednotlivé měsíce) a roční data</li>
+<li>Vyhlaďte rozdíly pomocí filtru loess</li>
+<li>Opravte simulované veličiny</li>
+<li>Vytvořte funkci umožňující korekci distribuční funkce pro jednotlivé měsíce</li>
+</ol>
+
+<hr>
+
+<h3>
+<a id="4-cviČenÍ---hydrologickÝ-model-a-syntÉza" class="anchor" href="#4-cvi%C4%8Cen%C3%8D---hydrologick%C3%9D-model-a-synt%C3%89za" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>4. CVIČENÍ - HYDROLOGICKÝ MODEL A SYNTÉZA</h3>
+
+<h4>
+<a id="nové-funkce-v-balíku" class="anchor" href="#nov%C3%A9-funkce-v-bal%C3%ADku" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Nové funkce v balíku:</h4>
+
+<ul>
+<li>
+<code>correct</code> - provede korekci systematických chyb - viz <code>?correct</code>
+</li>
+<li>
+<code>bil.lapv</code> - vytvoří instanci modelu Bilan s parametry pro zadanou LAPV - viz <code>?bil.lapv</code>
+</li>
+</ul>
+
+<h3>
+<a id="stručný-úvod-do-modelu-bilan" class="anchor" href="#stru%C4%8Dn%C3%BD-%C3%BAvod-do-modelu-bilan" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Stručný úvod do modelu Bilan</h3>
+
+<ul>
+<li>
+<a href="http://bilan.vuv.cz/bilan/uzivatelska-prirucka-modelu-bilan/">Bilan</a> je model hydrologické bilance vyvíjený ve Výzkumném ústavu vodohospodářském T. G. Masaryka, v.v.i.</li>
+<li>2 verze (stejné jádro) - uživatelské rozhraní x balík pro R</li>
+<li>nainstalujte pomocí zipového souboru <code>bilan_2015-06-18.zip</code> ve složce materialy, verze pro linux a OS X viz <code>bilan_2015-06-18.tar.gz</code>
+</li>
+<li>základní postup práce relevantní pro naše účely je následující:</li>
+</ul>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-k">&gt;</span> library(<span class="pl-smi">bilan</span>)
+<span class="pl-k">&gt;</span> 
+<span class="pl-k">&gt;</span> <span class="pl-c"># načti data</span>
+<span class="pl-k">&gt;</span> <span class="pl-v">dta</span> <span class="pl-k">=</span> get_lapv_data(<span class="pl-s"><span class="pl-pds">"</span>AMERIKA<span class="pl-pds">"</span></span>)
+<span class="pl-k">&gt;</span> 
+<span class="pl-k">&gt;</span> <span class="pl-c"># vytvoř model </span>
+<span class="pl-k">&gt;</span> <span class="pl-v">b</span> <span class="pl-k">=</span> bil.lapv(<span class="pl-s"><span class="pl-pds">"</span>AMERIKA<span class="pl-pds">"</span></span>)
+<span class="pl-k">&gt;</span> 
+<span class="pl-k">&gt;</span> <span class="pl-c"># model existuje, má příslušné parametry:</span>
+<span class="pl-k">&gt;</span> bil.get.params(<span class="pl-smi">b</span>)</pre></div>
+
+<pre><code>  name     current lower upper     initial
+1  Spa 1.45620e+02     0 2e+02 1.45620e+02
+2  Dgw 5.88764e+00     0 2e+01 5.88764e+00
+3  Alf 1.74327e-03     0 3e-03 1.74327e-03
+4  Dgm 5.79781e+00     0 2e+02 5.79781e+00
+5  Soc 5.40708e-01     0 1e+00 5.40708e-01
+6  Wic 2.20102e-01     0 1e+00 2.20102e-01
+7  Mec 6.85181e-01     0 1e+00 6.85181e-01
+8  Grd 7.06486e-01     0 1e+00 7.06486e-01
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-k">&gt;</span> <span class="pl-c"># ale žádná data</span>
+<span class="pl-k">&gt;</span> bil.get.data(<span class="pl-smi">b</span>)</pre></div>
+
+<pre><code> [1] DTM  P    R    RM   BF   B    I    DR   PET  ET   SW   SS   GS   INF 
+[15] PERC RC   T    H    WEI 
+&lt;0 rows&gt; (or 0-length row.names)
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-k">&gt;</span> <span class="pl-c"># Proto nahrajeme do modelu příslušná data z data.tablu dta</span>
+<span class="pl-k">&gt;</span> bil.set.values(<span class="pl-smi">b</span>, <span class="pl-smi">dta</span>[, .(<span class="pl-smi">DTM</span>, <span class="pl-v">P</span> <span class="pl-k">=</span> <span class="pl-smi">obs_P</span>, <span class="pl-c1">T</span> <span class="pl-k">=</span> <span class="pl-smi">obs_T</span>)])
+<span class="pl-k">&gt;</span> 
+<span class="pl-k">&gt;</span> <span class="pl-c"># poté stačí spočítat potenciální evapotranspiraci </span>
+<span class="pl-k">&gt;</span> bil.pet(<span class="pl-smi">b</span>)
+<span class="pl-k">&gt;</span> 
+<span class="pl-k">&gt;</span> <span class="pl-c"># a model spustit</span>
+<span class="pl-k">&gt;</span> <span class="pl-v">res</span> <span class="pl-k">=</span> bil.run(<span class="pl-smi">b</span>)
+<span class="pl-k">&gt;</span> 
+<span class="pl-k">&gt;</span> <span class="pl-smi">res</span></pre></div>
+
+<pre><code>             DTM       P  R         RM           BF  B          I
+   1: 1901-01-15 36.2415 NA 35.7908173 35.324300000 NA  0.4665173
+   2: 1901-02-15 51.4596 NA 11.5360213 11.536021346 NA  0.0000000
+   3: 1901-03-15 76.6677 NA 12.8199999  3.385983769 NA  9.4340161
+   4: 1901-04-15 68.9088 NA 94.3496046 24.610249803 NA 69.7393548
+   5: 1901-05-15 71.1843 NA 47.8007750 29.861403497 NA 17.9393715
+  ---                                                            
+1256: 2005-08-15 88.0452 NA 11.7690601  0.460872783 NA  0.0000000
+1257: 2005-09-15 54.6231 NA  4.2980476  0.135272614 NA  0.0000000
+1258: 2005-10-15 16.0395 NA  0.3883653  0.039704406 NA  0.0000000
+1259: 2005-11-15 24.1092 NA  0.7421294  0.011653799 NA  0.0000000
+1260: 2005-12-15 66.6222 NA  1.5646058  0.003420553 NA  1.5611852
+              DR       PET        ET       SW        SS           GS
+   1:  0.0000000  0.000000  0.000000 145.6200  34.12195 16.328733118
+   2:  0.0000000  0.000000  0.000000 145.6200  85.58155  4.792711772
+   3:  0.0000000 12.220326 12.220326 145.6200 107.16690 34.834731053
+   4:  0.0000000 41.237383 41.237383 145.6200  33.05594 42.267509190
+   5:  0.0000000 78.058293 78.058293 145.6200   0.00000 20.648679538
+  ---                                                               
+1256: 11.3081873 83.225574 82.047393 116.5431   0.00000  0.191472462
+1257:  4.1627750 54.688036 53.795217 113.2082   0.00000  0.056199848
+1258:  0.3486609 26.682549 23.921498 104.9776   0.00000  0.016495442
+1259:  0.7304756  7.142156  7.142156 121.2141   0.00000  0.004841643
+1260:  0.0000000  2.276500  2.276500 145.6200  32.84683  5.533243748
+            INF       PERC        RC     T  H WEI
+   1:   2.11955   2.119550  1.653033 -7.64 NA   1
+   2:   0.00000   0.000000  0.000000 -8.25 NA   1
+   3:  42.86202  42.862019 33.428003 -0.72 NA   1
+   4: 101.78238 101.782383 32.043028  5.67 NA   1
+   5:  26.18195  26.181945  8.242574 11.03 NA   1
+  ---                                            
+1256:  76.73701   0.000000  0.000000 14.37 NA   1
+1257:  50.46032   0.000000  0.000000 12.56 NA   1
+1258:  15.69084   0.000000  0.000000  7.65 NA   1
+1259:  23.37872   0.000000  0.000000  0.69 NA   1
+1260:  31.49887   7.093008  5.531823 -2.65 NA   1
+</code></pre>
+
+<h4>
+<a id="zadání-1" class="anchor" href="#zad%C3%A1n%C3%AD-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Zadání:</h4>
+
+<ul>
+<li>nahrajte data pro zvolenou LAPV</li>
+<li>pomocí funkce <code>correct</code> zkorigujte simulované srážky a teploty</li>
+<li>nainstalujte balík <code>bilan</code>
+</li>
+<li>nahrajte model pro zvolenou LAPV</li>
+<li>vytvořte data.frame, který bude obsahovat veličiny
+
+<ul>
+<li>
+<code>DTM</code> - datum</li>
+<li>
+<code>obs_RM</code> - odtok modelovaný na základě pozorovaných srážek a teploty</li>
+<li>
+<code>sim_RM</code> - odtok modelovaný na základě simulovaných srážek a teploty z klimatického modelu</li>
+<li>
+<code>cor_RM</code> - odtok modelovaný na základě korigovaných srážek a teploty</li>
+</ul>
+</li>
+<li>vykreslete odchylky <code>sim_RM</code>/<code>obs_RM</code> a <code>cor_RM</code>/<code>obs_RM</code> pro jednotlivé kvantily distribuční funkce a měsíce</li>
+<li>spočítejte hurstův koeficient pro tyto řady a vykreslete řady kumulativních odchylek od průměru</li>
+</ul>
+
+<h1>
+<a id="protokol" class="anchor" href="#protokol" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PROTOKOL</h1>
+
+<ul>
+<li>použijte Rmarkdown</li>
+<li>struktura viz protokol.Rmd (zkopírujte a doplňte)</li>
+<li>odevzdání - mailem pdf <strong>nebo</strong> odkaz na html uložené na rpubs.com</li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/hanel">hanel</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
