@@ -1,0 +1,58 @@
+---
+title: "Protokol"
+author: "student"
+date: "21 brezna 2017"
+output: html_document
+---
+
+## Úvod
+
+Na??teme balíky a nahrajeme data
+
+```{r, message=FALSE}
+require(hmkzLAPV)
+require(data.table)
+dta = get_lapv_data("AMERIKA")
+```
+
+## P??ehled pozorovaných a simulovaných dat
+
+- ukázka dat (tabulka) - popis veli??in
+- graf m??sí??ních pr??m??r?? a rozdílù/pom??r?? simulovaných a pozorovaných srážek a teploty
+
+
+```{r}
+head(dta)
+```
+
+```{r}
+mdta = dta[, .(obs_P = mean(obs_P), sim_P = mean(sim_P)), by = month(DTM)]
+mdta[, diff_P := sim_P/obs_P]
+knitr::kable(mdta)
+```
+
+```{r, echo=FALSE}
+ydta = mon2yr(dta)
+ydta[, {
+  plot(DTM, obs_P, type = 'l')
+  lines(DTM, sim_P, col = 'red')
+  }]
+```
+
+## Korekce systematických chyb
+
+- korekce distribu??ních funkcí `correct` z balíku hmkzLAPV
+- porovnání distribu??ních funkcí (12 grafù) - pro srážky, teplotu
+
+## Simulace bilanem
+
+- porovnání distribu??ních funkcí (12 grafù) - pro odtok
+
+
+## Hurstùv koeficinet
+
+- grafy kumulativních odchylek od pr??m??ru pro odtok - pozorovaný, simulovaný a korigovaný
+- hodnoty Hurstova koeficientu (fce `hurst`)
+
+## Sucho - Adam Vizina
+
