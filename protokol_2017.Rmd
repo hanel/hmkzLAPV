@@ -5,9 +5,9 @@ date: "21 brezna 2017"
 output: html_document
 ---
 
-## Úvod
+## Ãšvod
 
-Na??teme balíky a nahrajeme data
+NaÄteme balÃ­ky a nahrajeme data
 
 ```{r, message=FALSE}
 require(hmkzLAPV)
@@ -15,10 +15,10 @@ require(data.table)
 dta = get_lapv_data("AMERIKA")
 ```
 
-## P??ehled pozorovanıch a simulovanıch dat
+## PÅ™ehled pozorovanÃ½ch a simulovanÃ½ch dat
 
-- ukázka dat (tabulka) - popis veli??in
-- graf m??sí??ních pr??m??r?? a rozdílù/pom??r?? simulovanıch a pozorovanıch sráek a teploty
+- ukÃ¡zka dat (tabulka) - popis veliÄin
+- graf mÄ›sÃ­ÄnÃ­ch prÅ¯mÄ›rÅ¯ a rozdÃ­lÃ¹/pomÄ›rÅ¯ simulovanÃ½ch a pozorovanÃ½ch srÃ¡Å¾ek a teploty
 
 
 ```{r}
@@ -39,19 +39,19 @@ ydta[, {
   }]
 ```
 
-## Korekce systematickıch chyb
+## Korekce systematickÃ½ch chyb
 
-- korekce distribu??ních funkcí `correct` z balíku hmkzLAPV
-- porovnání distribu??ních funkcí (12 grafù) - pro sráky, teplotu
+- korekce distribuÄnÃ­ch funkcÃ­ `correct` z balÃ­ku hmkzLAPV
+- porovnÃ¡nÃ­ distribuÄnÃ­ch funkcÃ­ (12 grafÃ¹) - pro srÃ¡Å¾ky, teplotu
 
 ## Simulace bilanem
 
-- porovnání distribu??ních funkcí (12 grafù) - pro odtok
+- porovnÃ¡nÃ­ distribuÄnÃ­ch funkcÃ­ (12 grafÃ¹) - pro odtok
 
 
-## Hurstùv koeficinet
+## HurstÃ¹v koeficinet
 
-- grafy kumulativních odchylek od pr??m??ru pro odtok - pozorovanı, simulovanı a korigovanı
+- grafy kumulativnÃ­ch odchylek od prÅ¯mÄ›ru pro odtok - pozorovanÃ½, simulovanÃ½ a korigovanÃ½
 - hodnoty Hurstova koeficientu (fce `hurst`)
 
 ## Sucho - Adam Vizina
