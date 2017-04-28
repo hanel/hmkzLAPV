@@ -5,7 +5,15 @@ date: "21 brezna 2017"
 output: html_document
 ---
 
+Obecné pokyny:
+
+- do úvodu zařaďte odstavec, který bude stručně a věcně popisovat, co, jak a proč děláte
+- každý graf bude mít legendu (aspoň v textu napsáno, co která barva znamená)
+- struktura, viz dále
+- v závěru zhodnoťte, jak úspěšná je korekce pro srážky, teplotu a odtok, 
+
 ## Úvod
+
 
 Načteme balíky a nahrajeme data
 
@@ -15,10 +23,10 @@ require(data.table)
 dta = get_lapv_data("AMERIKA")
 ```
 
-## Přehled pozorovaných a simulovaných dat
+## Přehled pozorovaných a simulovaných dat - 1 tabulka, 3 grafy
 
 - ukázka dat (tabulka) - popis veličin
-- graf měsíčních průměrů a rozdílù/poměrů simulovaných a pozorovaných srážek a teploty
+- graf měsíčních časových řad srážek, teploty a odtoku
 
 
 ```{r}
@@ -39,20 +47,23 @@ ydta[, {
   }]
 ```
 
-## Korekce systematických chyb
+## Korekce systematických chyb - 2 grafy (na každém 12 panelů)
 
-- korekce distribučních funkcí `correct` z balíku hmkzLAPV
-- porovnání distribučních funkcí (12 grafù) - pro srážky, teplotu
+- korekce distribučních funkcí - `correct` z balíku hmkzLAPV
+- porovnání distribučních funkcí (12ti panelový graf) - pro srážky, teplotu
 
-## Simulace bilanem
+## Simulace bilanem - 1 graf s 12 panely
 
-- porovnání distribučních funkcí (12 grafù) - pro odtok
+- porovnání distribučních funkcí (12ti panelový graf) - pro odtok
 
 
-## Hurstùv koeficinet
+## Hurstùv koeficinet - 1 graf + tabulka
 
-- grafy kumulativních odchylek od průměru pro odtok - pozorovaný, simulovaný a korigovaný
+- grafy kumulativních odchylek od průměru pro odtok - pozorovaný, simulovaný, případně korigovaný
 - hodnoty Hurstova koeficientu (fce `hurst`)
 
-## Sucho - Adam Vizina
+## Sucho - Adam Vizina - 3 grafy
 
+- graf SPEI
+
+## Závěr
